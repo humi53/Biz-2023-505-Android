@@ -9,21 +9,32 @@ void main(List<String> args) {
     nums.add(num);
   }
 
-  // 배열에 저장된 요소들중에 소수를 구하여 출력하시오.
-  List<int> result = [];
-  for (int i = 0; i < nums.length; i++) {
-    if (prime(nums[i])) result.add(nums[i]);
-  }
-  print(nums);
-  print("prime : $result");
-}
-
-bool prime(int num) {
-  if (num < 2) return false;
-  for (int i = 2; i < num; i++) {
-    if (num % i == 0) {
-      return false;
+  // 배열에 저장된 요소들중에 소수를 구하여 출력하시오
+  for (var i = 0; i < nums.length; i++) {
+    var index = 2;
+    for (index = 2; index < nums[i]; index++) {
+      if (nums[i] % index == 0) break;
+    }
+    // index 와 nums[i] 관계
+    if (index < nums[i]) {
+      print("${nums[i]} 는 소수가 아님");
+    } else {
+      print("${nums[i]} 는 소수!!!");
     }
   }
-  return true;
+  for (int i = 0; i < nums.length; i++) {
+    int result = prime(nums[i]);
+    if (result > 0) {
+      print("${nums[i]} 는 소수");
+    } else {
+      print("${nums[i]} 는 소수가 아님");
+    }
+  }
+}
+
+int prime(int num) {
+  for (int i = 2; i < num; i++) {
+    if (num % i == 0) return 0;
+  }
+  return num;
 }

@@ -1,11 +1,11 @@
 void main(List<String> args) {
   for (int i = 0; i < 10; i++) {
-    print(i + 1);
+    print(i);
   }
 
   int sum = 0;
   for (int i = 0; i < 10; i++) {
-    sum += i;
+    sum += (i + 1);
   }
   print("합계 : $sum");
 
@@ -15,6 +15,7 @@ void main(List<String> args) {
     if (num % 2 == 0) sum += num;
   }
   print("짝수의 합 : $sum");
+  print("짝수의 합 : " + sum.toString());
 
   List<int> nums = [];
   for (int i = 0; i < 45; i++) {
