@@ -8,16 +8,18 @@ import 'package:todolist/models/todo.dart';
 /// 기본적인 기능만으로는 다소 사용이 불편하여 sqflite.dart 를 사용하여
 /// 관리한다
 
+// ignore: constant_identifier_names
+const String TBL_TODO = "tbl_todoList";
+
 class TodoService {
   /// 변수 이름에 under score 를 붙이면 이 변수는 private 이라는 의미
   /// late 키워드는 아직 변수를 초기화 시키지 않았지만
   /// 이 값은 null 이 아니다 라는 선언
   /// 즉, 곧 이 변수는 누군가가 초기화(값 부여)를 할 것이다
   late Database _database;
-  final String TBL_TODO = "tbl_todoList";
 
   final String createTABLE = """
-    CREATE TABLE tbl_todoList (
+    CREATE TABLE $TBL_TODO (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       sdate TEXT,
       stime TEXT,
@@ -70,11 +72,13 @@ class TodoService {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  // where : "id = ${id}" sql Injection 공격 id = "1 = 1 OR "
+  // SQL 을 사용할때 문자열 연결방식으로 WHERE 절을 사용하면 절대 안된다
   Future<int> delete(int id) async {
     final db = await database;
     return db.delete(
       TBL_TODO,
-      where: "id=$id",
+      where: "id= ?",
       whereArgs: [id],
     );
   }
