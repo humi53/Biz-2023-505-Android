@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/page/email_page.dart';
-import 'package:flutter_application_1/page/home_page.dart';
-import 'package:flutter_application_1/page/my_page.dart';
 
 import './page/main_drawer.dart';
+import 'page/email_page.dart';
+import 'page/home_page.dart';
+import 'page/my_page.dart';
 
 void main() {
   runApp(const App());
