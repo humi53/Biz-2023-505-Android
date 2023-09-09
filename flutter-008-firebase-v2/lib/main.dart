@@ -55,47 +55,31 @@ class _StartPageState extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Firebase Project"),
+      appBar: AppBar(
+        title: const Text("Firebase Project"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "반갑습니다",
+              style: TextStyle(fontSize: 35),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Mypage(
+                    authUser: _authUser,
+                    updateAuthUser: updateAuthUser,
+                  ),
+                ));
+              },
+              child: const Text("마이페이지"),
+            ),
+          ],
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "반갑습니다",
-                style: TextStyle(fontSize: 35),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Mypage(
-                      authUser: _authUser,
-                      updateAuthUser: updateAuthUser,
-                    ),
-                  ));
-                },
-                child: const Text("마이페이지"),
-              ),
-            ],
-          ),
-        )
-        // _authUser != null
-        //     ? Column(
-        //         children: [
-        //           Text(_authUser?.email ?? ""),
-        //           ElevatedButton(
-        //             onPressed: () async {
-        //               await FirebaseAuth.instance.signOut();
-        //               updateAuthUser(null);
-        //             },
-        //             child: const Text("로그아웃"),
-        //           )
-        //         ],
-        //       )
-        //     : LoginPage(
-        //         updateAuthUser: updateAuthUser,
-        //       ),
-        );
+      ),
+    );
   }
 }
