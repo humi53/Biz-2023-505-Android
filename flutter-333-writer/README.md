@@ -80,3 +80,7 @@
 
 - firebase, firestore
   - firebase 에서 count 비용은 매우 크다.
+
+# 2023-09-11
+
+- 화면이 넘어갔을때 경고창 처리. 필요.
