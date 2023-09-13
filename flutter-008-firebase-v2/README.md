@@ -47,7 +47,7 @@
 - 화면 상단에서 android 선택하고 절차대로 진행
 
 ```bash
-firebase logiin
+firebase login
 flutter pub add firebase_core
 flutter pub add firebase_auth
 ```

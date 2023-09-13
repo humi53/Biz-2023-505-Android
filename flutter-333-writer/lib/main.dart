@@ -1,9 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:writer/firebase_options.dart';
+import 'package:writer/page/login_page.dart';
 import 'package:writer/page/main_Menu.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const App());
 }
 
@@ -27,14 +33,29 @@ class StartPage extends StatefulWidget {
 
 class _StartPageState extends State<StartPage> {
   late User? _authUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _authUser = FirebaseAuth.instance.currentUser;
+  }
+
+  void updateAuthUser(User? user) {
+    setState(() {
+      _authUser = user;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Nado Painter"),
       ),
-      body: _authUser != null ? const Text("뀨?") : const Text("정상화면"),
-      drawer: mainMenu(context),
+      body: _authUser != null
+          ? const Text("배경화면 만들기.")
+          : LoginPage(updateAuthUser: updateAuthUser),
+      drawer: _authUser != null ? mainMenu(context) : null,
     );
   }
 }
