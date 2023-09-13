@@ -26,6 +26,9 @@ render.experimental.xml
 *.jks
 *.keystore
 
+# Android Profiling
+*.hprof
+
 # Google Services (e.g. APIs or Firebase)
 google-services.json
 firebase_options.*
@@ -33,6 +36,3 @@ mode_modules/
 
 # naver service
 naver_open_api.*
-
-# Android Profiling
-*.hprof
