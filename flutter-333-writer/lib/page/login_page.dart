@@ -3,12 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({
-    super.key,
-    required this.updateAuthUser,
-  });
+  const LoginPage({super.key});
   // main dart 에 선언된 _authUser 변수를 update 할 함수 사용할 준비
-  final Function(User? user) updateAuthUser;
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -60,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                             );
                             // main.dart 의 _authUser State 에 로그인한 사용자 정보
                             // Update 요청하기
-                            widget.updateAuthUser(result.user);
+                            // widget.updateAuthUser(result.user);
                             // 화면전환, SnackBar 등을 화면에 표현하고자 할때
                             // Don't use BuildContext ... 의 경고가 나타나면
                             // 아래의 코드를 먼저 실행하도록 추가한다.
@@ -70,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                             // mounted 라는 시스템 변수가 생성되었는지 확인 한수
                             // context 관련 코드를 실행하라 라는 의미
                             if (!mounted) return;
-                            Navigator.of(context).pop();
+                            // Navigator.of(context).pop();
                           }
                         } on FirebaseAuthException {
                           ScaffoldMessenger.of(context)
@@ -118,12 +114,13 @@ class _LoginPageState extends State<LoginPage> {
                             final userCredential = await FirebaseAuth.instance
                                 .signInWithCredential(credential);
 
-                            await widget.updateAuthUser(userCredential.user);
+                            // await widget.updateAuthUser(user/Credential.user);
                             if (!mounted) return;
                             Navigator.of(context).pop();
                           }
                         } catch (e) {
                           if (!mounted) return;
+                          debugPrint(e.toString());
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(e.toString())));
                         }
@@ -133,6 +130,32 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(
                           "구글 로그인",
                           textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      onPressed: () {
+                        debugPrint("회원가입 화면으로 보내버렷");
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //   builder: (context) => const JoinPage(updateAuthUser: updateU),
+                        // ));
+                      },
+                      child: const SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          "회원가입",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 15),
                         ),
                       ),
                     ),

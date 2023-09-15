@@ -1,19 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:writer/page/allpic_page.dart';
 import 'package:writer/page/home_page.dart';
 import 'package:writer/page/hotpic_page.dart';
 import 'package:writer/page/mypic_page.dart';
 import 'package:writer/page/pushpic_page.dart';
+import 'package:writer/providers/simple_data.dart';
 
 Widget mainMenu(BuildContext context) => Drawer(
       child: ListView(
         children: [
-          const UserAccountsDrawerHeader(
-            currentAccountPicture: CircleAvatar(
+          UserAccountsDrawerHeader(
+            currentAccountPicture: const CircleAvatar(
               backgroundImage: AssetImage("images/profile.png"),
             ),
-            accountName: Text("YoPheu"),
-            accountEmail: Text("yo.pheu@gmail.com"),
+            accountName: const Text("YoPheu"),
+            accountEmail: const Text("yo.pheu@gmail.com"),
+            otherAccountsPictures: [
+              IconButton(
+                onPressed: () async {
+                  debugPrint(
+                      "test: ${context.read<SimpleData>().getMyString()}");
+                  // Navigator.pop(context);
+                  // await FirebaseAuth.instance.signOut();
+                  // widget.updateAuthUser(null);
+                },
+                icon: const Icon(Icons.logout),
+              )
+            ],
           ),
           ListTile(
             title: const Text(
