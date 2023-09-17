@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:writer/page/allpic_page.dart';
@@ -19,11 +22,13 @@ Widget mainMenu(BuildContext context) => Drawer(
             otherAccountsPictures: [
               IconButton(
                 onPressed: () async {
-                  debugPrint(
-                      "test: ${context.read<SimpleData>().getMyString()}");
-                  // Navigator.pop(context);
-                  // await FirebaseAuth.instance.signOut();
-                  // widget.updateAuthUser(null);
+                  final simpleData = context.read<SimpleData>();
+                  final authUser = await simpleData.getAuthUser();
+                  // debugPrint("test: ${await simpleData.getMyString()}");
+                  // debugPrint("authUser : $authUser");
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.pop(context); // Drawer를 닫아주면서
+                  simpleData.setAuthUser(null);
                 },
                 icon: const Icon(Icons.logout),
               )

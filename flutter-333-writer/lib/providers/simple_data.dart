@@ -5,6 +5,10 @@ class SimpleData extends ChangeNotifier {
   String _myString = "test";
   late User? _authUser;
 
+  SimpleData() {
+    _authUser = FirebaseAuth.instance.currentUser;
+  }
+
   void setAuthUser(User? authUser) {
     _authUser = authUser;
     notifyListeners();

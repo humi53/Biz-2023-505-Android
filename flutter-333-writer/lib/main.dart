@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -42,21 +44,35 @@ class StartPage extends StatefulWidget {
 
 class _StartPageState extends State<StartPage> {
   late User? _authUser;
-
-  String myString = "test";
+  late var simpleData;
   @override
   void initState() {
     super.initState();
-    _authUser = FirebaseAuth.instance.currentUser;
+    simpleData = context.read<SimpleData>();
+    _authUser = null;
+  }
+
+  void setAuthUser() async {
+    await simpleData.setAuthUser(FirebaseAuth.instance.currentUser);
+  }
+
+  void getAuthUser() async {
+    _authUser = await simpleData.getAuthUser();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    getAuthUser();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Nado Painter"),
       ),
       body: _authUser != null ? const Text("배경화면 만들기.") : const LoginPage(),
+      // body: simpleData.getAuthUser() != null
+      //     ? const Text("배경화면 만들기.")
+      //     : const LoginPage(),
+      // drawer: simpleData.getAuthUser() != null ? mainMenu(context) : null,
       drawer: _authUser != null ? mainMenu(context) : null,
     );
   }

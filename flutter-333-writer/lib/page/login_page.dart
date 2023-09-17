@@ -1,6 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:writer/providers/simple_data.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -54,6 +58,10 @@ class _LoginPageState extends State<LoginPage> {
                               email: _emailValue,
                               password: _passwordValue,
                             );
+
+                            final simpleData = context.read<SimpleData>();
+                            simpleData
+                                .setAuthUser(FirebaseAuth.instance.currentUser);
                             // main.dart 의 _authUser State 에 로그인한 사용자 정보
                             // Update 요청하기
                             // widget.updateAuthUser(result.user);
@@ -66,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                             // mounted 라는 시스템 변수가 생성되었는지 확인 한수
                             // context 관련 코드를 실행하라 라는 의미
                             if (!mounted) return;
+
                             // Navigator.of(context).pop();
                           }
                         } on FirebaseAuthException {
