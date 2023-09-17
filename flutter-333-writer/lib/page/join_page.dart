@@ -7,9 +7,9 @@ import 'package:writer/modules/validate.dart';
 import 'package:writer/ui_models/login_input_form_field.dart';
 
 class JoinPage extends StatefulWidget {
-  const JoinPage({super.key, required this.updateAuthUser});
+  const JoinPage({super.key});
   // State<> 클래스 위젯에 함수르 전달하기 위하여 선언하기
-  final Function(User? user) updateAuthUser;
+  // final Function(User? user) updateAuthUser;
 
   @override
   State<JoinPage> createState() => _JoinPageState();

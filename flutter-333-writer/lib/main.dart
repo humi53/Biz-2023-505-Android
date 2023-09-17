@@ -69,10 +69,6 @@ class _StartPageState extends State<StartPage> {
         title: const Text("Nado Painter"),
       ),
       body: _authUser != null ? const Text("배경화면 만들기.") : const LoginPage(),
-      // body: simpleData.getAuthUser() != null
-      //     ? const Text("배경화면 만들기.")
-      //     : const LoginPage(),
-      // drawer: simpleData.getAuthUser() != null ? mainMenu(context) : null,
       drawer: _authUser != null ? mainMenu(context) : null,
     );
   }
