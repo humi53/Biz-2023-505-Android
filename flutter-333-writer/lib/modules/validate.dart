@@ -38,4 +38,16 @@ class CheckValidate {
     }
     return null;
   }
+
+  String? nickCheck({
+    required String nick,
+    required FocusNode focusNode,
+  }) {
+    if (nick.isEmpty) {
+      return "닉네임을 입력해주세요";
+    } else {
+      // db에서 중복확인.
+      return "이상없는지 확인.";
+    }
+  }
 }

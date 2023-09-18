@@ -8,7 +8,7 @@ import 'package:writer/page/home_page.dart';
 import 'package:writer/page/hotpic_page.dart';
 import 'package:writer/page/mypic_page.dart';
 import 'package:writer/page/pushpic_page.dart';
-import 'package:writer/providers/simple_data.dart';
+import 'package:writer/providers/login_user_provider.dart';
 
 Widget mainMenu(BuildContext context) => Drawer(
       child: ListView(
@@ -22,13 +22,15 @@ Widget mainMenu(BuildContext context) => Drawer(
             otherAccountsPictures: [
               IconButton(
                 onPressed: () async {
-                  final simpleData = context.read<SimpleData>();
-                  final authUser = await simpleData.getAuthUser();
-                  // debugPrint("test: ${await simpleData.getMyString()}");
+                  final loginUserProvider = context.read<LoginUserProvider>();
+                  final authUser = await loginUserProvider.getAuthUser();
+                  // debugPrint("test: ${await loginUserData.getMyString()}");
                   // debugPrint("authUser : $authUser");
                   await FirebaseAuth.instance.signOut();
+
                   Navigator.pop(context); // Drawer를 닫아주면서
-                  simpleData.setAuthUser(null);
+                  loginUserProvider.setAuthUser(null);
+                  loginUserProvider.setUserDto(null);
                 },
                 icon: const Icon(Icons.logout),
               )

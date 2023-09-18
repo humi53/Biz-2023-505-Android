@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:writer/models/user_dto.dart';
 
-class SimpleData extends ChangeNotifier {
-  String _myString = "test";
+class LoginUserProvider extends ChangeNotifier {
   late User? _authUser;
-
-  SimpleData() {
+  late UserDto? _userDto;
+  LoginUserProvider() {
     _authUser = FirebaseAuth.instance.currentUser;
   }
 
@@ -18,13 +18,12 @@ class SimpleData extends ChangeNotifier {
     return _authUser;
   }
 
-  Future<String> getMyString() async {
+  void setUserDto(UserDto? userDto) {
+    _userDto = userDto;
     notifyListeners();
-    return _myString;
   }
 
-  void setMyString(strMy) {
-    _myString = strMy;
-    notifyListeners();
+  UserDto? getUserDto() {
+    return _userDto;
   }
 }

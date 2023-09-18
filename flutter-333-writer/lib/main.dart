@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:writer/firebase_options.dart';
 import 'package:writer/page/login_page.dart';
 import 'package:writer/page/main_Menu.dart';
-import 'package:writer/providers/simple_data.dart';
+import 'package:writer/providers/login_user_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +17,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => SimpleData()),
+        ChangeNotifierProvider(create: (_) => LoginUserProvider()),
       ],
       child: const App(),
     ),
@@ -44,20 +44,20 @@ class StartPage extends StatefulWidget {
 
 class _StartPageState extends State<StartPage> {
   late User? _authUser;
-  late var simpleData;
+  late var loginUserProvider;
   @override
   void initState() {
     super.initState();
-    simpleData = context.read<SimpleData>();
+    loginUserProvider = context.read<LoginUserProvider>();
     _authUser = null;
   }
 
   void setAuthUser() async {
-    await simpleData.setAuthUser(FirebaseAuth.instance.currentUser);
+    await loginUserProvider.setAuthUser(FirebaseAuth.instance.currentUser);
   }
 
   void getAuthUser() async {
-    _authUser = await simpleData.getAuthUser();
+    _authUser = await loginUserProvider.getAuthUser();
     setState(() {});
   }
 
