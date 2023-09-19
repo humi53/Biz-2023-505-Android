@@ -1,10 +1,58 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:writer/models/art_dto.dart';
+import 'package:writer/providers/login_user_provider.dart';
 
 class GallaryService {
-  void uploadImage(XFile imageFile) async {
+  Future<int> insertArt(
+      {required BuildContext context,
+      required XFile imageFile,
+      required String title,
+      required String description}) async {
+    try {
+      String? downloadURL = await _uploadImage(imageFile);
+      var loginUserProvider = context.read<LoginUserProvider>();
+      var authUser = await loginUserProvider.getAuthUser();
+      var userDto = loginUserProvider.getUserDto();
+
+      var now = DateTime.now();
+      Timestamp.now();
+
+      ArtDto artDto = ArtDto(
+        userUid: authUser!.uid,
+        userNick: userDto!.nick,
+        title: title,
+        description: description,
+        imagePath: downloadURL!,
+        date: now,
+      );
+      debugPrint("artDto 생성 결과: ${artDto.toString()}");
+
+      await FirebaseFirestore.instance
+          .collection("gallary")
+          .add(artDto.toMap());
+      return 1;
+    } catch (e) {
+      debugPrint("입력실패: ${e.toString()}");
+      return -1;
+    }
+  }
+
+  List<ArtDto>? selectAllArt() {
+    return null;
+  }
+
+  Future<String?> _uploadImage(XFile? imageFile) async {
+    if (imageFile == null) {
+      return null;
+    }
     try {
       final storage = FirebaseStorage.instance.ref();
       final String fileName = DateTime.now().millisecondsSinceEpoch.toString();
@@ -25,17 +73,20 @@ class GallaryService {
       // });
 
       // 업로드 완료 대기
-      await uploadTask.whenComplete(() => print('Upload complete'));
+      await uploadTask.whenComplete(() => debugPrint('Upload complete'));
 
       // 업로드한 파일의 다운로드 URL 가져오기
       final String downloadURL = await storageRef.getDownloadURL();
 
       // 업로드한 이미지의 다운로드 URL을 사용하거나 저장합니다.
-      print('Image download URL: $downloadURL');
+      debugPrint('Image download URL: $downloadURL');
+
+      return downloadURL;
 
       // final mountainImagesRef = storageRef.child("images/mountains.jpg");
     } catch (e) {
-      print('Error uploading image: $e');
+      debugPrint('Error uploading image: $e');
+      return null;
     }
   }
 }
