@@ -54,12 +54,10 @@ class _PushpicState extends State<Pushpic> {
                         _description.isNotEmpty &&
                         _pickedImg != null) {
                       ArtDto artDto = ArtDto(
-                        uID: "uID",
                         title: _titleValue,
                         description: _description,
                         imagePath: _pickedImg!.path,
                       );
-                      debugPrint(artDto.toJson().toString());
                     }
                   },
                   child: const Text("저장"))
