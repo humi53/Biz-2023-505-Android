@@ -7,6 +7,7 @@ class LoginUserProvider extends ChangeNotifier {
   late UserDto? _userDto;
   LoginUserProvider() {
     _authUser = FirebaseAuth.instance.currentUser;
+    _userDto = null;
   }
 
   void setAuthUser(User? authUser) {

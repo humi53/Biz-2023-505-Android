@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:writer/models/art_dto.dart';
 import 'package:writer/ui_models/input_form_field.dart';
 
+///data/user/0/com.yopheu.writer/cache/cfc10c0b-f860-4288-9ca8-6aaafbe12a0f/여우-09-gemini761.jpg
 class Pushpic extends StatefulWidget {
   const Pushpic({super.key});
 
@@ -26,48 +27,51 @@ class _PushpicState extends State<Pushpic> {
         appBar: AppBar(
           title: const Text("작품 올리기"),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _pickedImg != null
-                ? Image.file(File(_pickedImg!.path))
-                : const Text('이미지가 없습니다'),
-            ElevatedButton(
-              onPressed: _pickImg,
-              child: const Text('이미지를 선택하세요.'),
-            ),
-            inputFormField(
-              setValue: (value) => _titleValue = value,
-              labelText: "Title Name",
-            ),
-            inputFormField(
-              setValue: (value) => _description = value,
-              maxLength: 500,
-              maxLines: 3,
-              labelText: "Details about art.",
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  if (_titleValue.isNotEmpty &&
-                      _description.isNotEmpty &&
-                      _pickedImg != null) {
-                    ArtDto artDto = ArtDto(
-                      uID: "uID",
-                      title: _titleValue,
-                      description: _description,
-                      imagePath: _pickedImg!.path,
-                    );
-                    debugPrint(artDto.toJson().toString());
-                  }
-                },
-                child: const Text("저장"))
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _pickedImg != null
+                  ? Image.file(File(_pickedImg!.path))
+                  : const Text('이미지가 없습니다'),
+              ElevatedButton(
+                onPressed: _pickImg,
+                child: const Text('이미지를 선택하세요.'),
+              ),
+              inputFormField(
+                setValue: (value) => _titleValue = value,
+                labelText: "Title Name",
+              ),
+              inputFormField(
+                setValue: (value) => _description = value,
+                maxLength: 500,
+                maxLines: 3,
+                labelText: "Details about art.",
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    if (_titleValue.isNotEmpty &&
+                        _description.isNotEmpty &&
+                        _pickedImg != null) {
+                      ArtDto artDto = ArtDto(
+                        uID: "uID",
+                        title: _titleValue,
+                        description: _description,
+                        imagePath: _pickedImg!.path,
+                      );
+                      debugPrint(artDto.toJson().toString());
+                    }
+                  },
+                  child: const Text("저장"))
+            ],
+          ),
         ));
   }
 
   Future<void> _pickImg() async {
     XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
+      debugPrint("image Path : ${image.path}");
       setState(() {
         _pickedImg = image;
       });

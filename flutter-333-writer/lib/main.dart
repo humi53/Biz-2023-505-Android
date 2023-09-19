@@ -54,6 +54,7 @@ class _StartPageState extends State<StartPage> {
 
   void setAuthUser() async {
     await loginUserProvider.setAuthUser(FirebaseAuth.instance.currentUser);
+    debugPrint(loginUserProvider.getUserDto.toString());
   }
 
   void getAuthUser() async {
