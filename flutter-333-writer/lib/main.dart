@@ -49,7 +49,7 @@ class _StartPageState extends State<StartPage> {
   void initState() {
     super.initState();
     loginUserProvider = context.read<LoginUserProvider>();
-    _authUser = null;
+    _authUser = FirebaseAuth.instance.currentUser;
   }
 
   void setAuthUser() async {
