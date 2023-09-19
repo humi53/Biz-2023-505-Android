@@ -119,6 +119,10 @@ class _JoinPageState extends State<JoinPage> {
                             content: Text(commitMessage),
                           ),
                         );
+                        await userService.emailLogin(
+                            context: context,
+                            email: _emailValue,
+                            password: _passwordValue);
                         if (result == 1) Navigator.of(context).pop();
                         setState(() {});
                       } on FirebaseException catch (e) {

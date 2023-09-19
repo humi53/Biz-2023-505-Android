@@ -36,25 +36,17 @@ class UserService {
       email: email,
       password: password,
     );
-
-    debugPrint(result.user?.photoURL);
-    debugPrint(result.user?.displayName);
-    debugPrint(result.user?.email);
-
     final loginUserProvider = context.read<LoginUserProvider>();
     var currentUser = FirebaseAuth.instance.currentUser;
     loginUserProvider.setAuthUser(currentUser);
     debugPrint(currentUser?.uid);
-
     if (currentUser != null) {
-      DocumentSnapshot<Map<String, dynamic>> docRef = await FirebaseFirestore
-          .instance
-          .collection("user")
-          .doc(currentUser.uid)
-          .get();
-
-      // debugPrint("나와라 나와라요 :  ${docRef.data()}");
-      var userData = docRef.data();
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await FirebaseFirestore.instance
+              .collection("user")
+              .doc(currentUser.uid)
+              .get();
+      var userData = docSnapshot.data();
       if (userData != null) {
         UserDto userDto = UserDto.fromJson(userData);
         loginUserProvider.setUserDto(userDto);
@@ -66,7 +58,6 @@ class UserService {
     } else {
       return -1;
     }
-    // result에 정상적인 값이 있으면 provider에 user_dto 를 설정.
   }
 
   Future<int> googleLogin(BuildContext context) async {
@@ -85,10 +76,6 @@ class UserService {
       // google 에게 로그인 요청
       String name = googleUser.displayName ?? googleUser.email.split('@')[0];
       String photoUrl = googleUser.photoUrl ?? "";
-
-      // google 이 보내준 인증정보를 사용하여
-      // firebase 에 로그인하기
-      // oAuth2 방식의 login
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
@@ -127,8 +114,19 @@ class UserService {
     return 0;
   }
 
-  // DB에서 email로 조회하여 나온 데이터를 User DTO를 만들어 return 한다.
-  // selectUser()
+  // DB에서 auth에 있는 uid로 DB 조회 User DTO를 만들어 return 한다.
+  Future<UserDto> selectUser(User? userAuth) async {
+    DocumentSnapshot<Map<String, dynamic>> docSnapshot = await FirebaseFirestore
+        .instance
+        .collection("user")
+        .doc(userAuth?.uid)
+        .get();
+    var userData = docSnapshot.data();
+    UserDto userDto = UserDto.fromJson(userData!);
+    // loginUserProvider.setUserDto(userDto);
+    debugPrint(userDto.toString());
+    return userDto;
+  }
 
   // email, 비밀번호를 사용하여 Auth에 계정을 생성한다.
   Future<UserCredential> _insertUserFromFireAuth(

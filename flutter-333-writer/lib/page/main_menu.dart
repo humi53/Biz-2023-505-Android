@@ -151,33 +151,36 @@ class _MainMenuState extends State<MainMenu> {
 
 Widget mainMenu(BuildContext context) {
   final loginUserProvider = context.read<LoginUserProvider>();
-  String proImg = loginUserProvider.getUserDto()?.proImgPath ?? "";
+  var userDto = loginUserProvider.getUserDto();
+  var proImgPath = userDto?.proImgPath ?? "";
+  var name = userDto?.name ?? "";
+  var email = userDto?.email ?? "";
   return Drawer(
     child: ListView(
       children: [
         UserAccountsDrawerHeader(
           currentAccountPicture: CircleAvatar(
-            backgroundImage: proImg != ""
+            backgroundImage: proImgPath != ""
                 ? Image.network(
-                    proImg,
+                    proImgPath,
                     errorBuilder: (context, error, stackTrace) {
                       return Image.asset("images/profile.png");
                     },
                   ).image
                 : const AssetImage("images/profile.png"),
           ),
-          accountName: const Text("YoPheu"),
-          accountEmail: const Text("yo.pheu@gmail.com"),
+          accountName: Text(name != "" ? name : "..."),
+          accountEmail: Text(email != "" ? email : "..."),
           otherAccountsPictures: [
             IconButton(
               onPressed: () async {
                 final authUser = await loginUserProvider.getAuthUser();
                 // debugPrint("test: ${await loginUserData.getMyString()}");
                 // debugPrint("authUser : $authUser");
+                Navigator.pop(context); // Drawer를 닫아주면서
                 await FirebaseAuth.instance.signOut();
                 loginUserProvider.setAuthUser(null);
                 loginUserProvider.setUserDto(null);
-                Navigator.pop(context); // Drawer를 닫아주면서
                 debugPrint("system: 마지막까지 실행되는지 테스트");
               },
               icon: const Icon(Icons.logout),
