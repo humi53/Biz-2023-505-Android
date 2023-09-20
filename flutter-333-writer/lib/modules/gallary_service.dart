@@ -32,6 +32,7 @@ class GallaryService {
         description: description,
         imagePath: downloadURL!,
         date: now,
+        docId: "",
       );
       debugPrint("artDto 생성 결과: ${artDto.toString()}");
 
@@ -45,8 +46,17 @@ class GallaryService {
     }
   }
 
-  List<ArtDto>? selectAllArt() {
-    return null;
+  Future<List<ArtDto>> selectAllArt() async {
+    List<ArtDto> dataList = [];
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('gallary')
+        .orderBy('date', descending: true)
+        .get();
+    for (var doc in snapshot.docs) {
+      dataList.add(ArtDto.fromMap(doc.data(), doc.id));
+    }
+    return dataList;
   }
 
   Future<String?> _uploadImage(XFile? imageFile) async {

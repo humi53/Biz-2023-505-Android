@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:writer/firebase_options.dart';
 import 'package:writer/page/login_page.dart';
 import 'package:writer/page/main_Menu.dart';
+import 'package:writer/providers/gallary_provider.dart';
 import 'package:writer/providers/login_user_provider.dart';
 
 void main() async {
@@ -18,6 +19,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LoginUserProvider()),
+        ChangeNotifierProvider(create: (_) => GallaryProvider()),
       ],
       child: const App(),
     ),
