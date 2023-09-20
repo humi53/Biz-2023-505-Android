@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,7 +12,7 @@ import 'package:writer/models/art_dto.dart';
 import 'package:writer/providers/login_user_provider.dart';
 
 class GallaryService {
-  Future<int> insertArt(
+  Future<ArtDto?> insertArt(
       {required BuildContext context,
       required XFile imageFile,
       required String title,
@@ -34,15 +35,17 @@ class GallaryService {
         date: now,
         docId: "",
       );
-      debugPrint("artDto 생성 결과: ${artDto.toString()}");
 
-      await FirebaseFirestore.instance
+      DocumentReference<Map<String, dynamic>> result = await FirebaseFirestore
+          .instance
           .collection("gallary")
           .add(artDto.toMap());
-      return 1;
+      artDto.docId = result.id;
+      debugPrint("artDto 생성 결과: ${artDto.toString()}");
+      return artDto;
     } catch (e) {
       debugPrint("입력실패: ${e.toString()}");
-      return -1;
+      return null;
     }
   }
 
@@ -53,6 +56,23 @@ class GallaryService {
         .collection('gallary')
         .orderBy('date', descending: true)
         .get();
+    for (var doc in snapshot.docs) {
+      dataList.add(ArtDto.fromMap(doc.data(), doc.id));
+    }
+    return dataList;
+  }
+
+  Future<List<ArtDto>> selectMyArt() async {
+    debugPrint("current Uid: 되나?");
+    List<ArtDto> dataList = [];
+    var currentAuth = FirebaseAuth.instance.currentUser;
+    debugPrint("current Uid: ${currentAuth?.uid}");
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('gallary')
+        .where('userUid', isEqualTo: currentAuth!.uid)
+        .get();
+    // debugPrint(snapshot.toString());
     for (var doc in snapshot.docs) {
       dataList.add(ArtDto.fromMap(doc.data(), doc.id));
     }

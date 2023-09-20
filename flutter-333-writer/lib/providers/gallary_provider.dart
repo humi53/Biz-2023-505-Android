@@ -12,4 +12,11 @@ class GallaryProvider extends ChangeNotifier {
     _artList = tempList;
     notifyListeners();
   }
+
+  loadMyArt() async {
+    debugPrint("current Uid: 되나?");
+    List<ArtDto>? tempList = await _gallaryService.selectMyArt();
+    _artList = tempList;
+    notifyListeners();
+  }
 }

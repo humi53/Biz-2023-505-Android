@@ -4,7 +4,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:writer/models/art_dto.dart';
 import 'package:writer/modules/gallary_service.dart';
+import 'package:writer/page/pic_detail_page.dart';
 import 'package:writer/ui_models/input_form_field.dart';
 
 ///data/user/0/com.yopheu.writer/cache/cfc10c0b-f860-4288-9ca8-6aaafbe12a0f/여우-09-gemini761.jpg
@@ -53,18 +55,20 @@ class _PushpicState extends State<Pushpic> {
                     if (_titleValue.isNotEmpty &&
                         _description.isNotEmpty &&
                         _pickedImg != null) {
-                      int result = await GallaryService().insertArt(
+                      ArtDto? artDto = await GallaryService().insertArt(
                           context: context,
                           imageFile: _pickedImg!,
                           title: _titleValue,
                           description: _description);
                       String message = "";
-                      if (result < 0) {
+                      if (artDto == null) {
                         message = "system: 오류가 발생하여 실패하였습니다.";
                       } else {
                         message = "업로드가 완료되었습니다";
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => PicDetail(artDto: artDto)));
                       }
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(message)),

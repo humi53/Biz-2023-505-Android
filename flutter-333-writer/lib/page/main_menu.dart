@@ -119,8 +119,8 @@ class _MainMenuState extends State<MainMenu> {
             ),
             onTap: () {
               debugPrint("나의작품들 클릭");
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => const Mypic()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const MyPicPage()));
             },
           ),
           const Divider(height: 0.2, color: Colors.blue),
@@ -260,8 +260,8 @@ Widget mainMenu(BuildContext context) {
           ),
           onTap: () {
             debugPrint("나의작품들 클릭");
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => const Mypic()));
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const MyPicPage()));
           },
         ),
         const Divider(height: 0.2, color: Colors.blue),
